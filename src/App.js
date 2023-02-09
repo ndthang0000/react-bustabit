@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import ColorButtons from './components/Button';
 import io from 'socket.io-client';
 import Play from './components/Play';
-const socket = io('http://localhost:3000/');
+const socket = io('http://localhost:3000/', { query: "token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjE0NjE1NiwiaWF0IjoxNjc1OTMyMzEzLCJleHAiOjE2NzU5NTM5MTMsInR5cGUiOiJhY2Nlc3MifQ.zy4okun7jMWDX3cK4gVY3-M_RAhxGqqQMnWVrydxZWU" });
 
 function App() {
   const [isConnected, setIsConnected] = useState(socket.connected);
