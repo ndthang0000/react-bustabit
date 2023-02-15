@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import ColorButtons from './components/Button';
 import io from 'socket.io-client';
 import Play from './components/Play';
-const socket = io('http://localhost:3000/', { query: "token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjE0NjE1NiwiaWF0IjoxNjc1OTMyMzEzLCJleHAiOjE2NzU5NTM5MTMsInR5cGUiOiJhY2Nlc3MifQ.zy4okun7jMWDX3cK4gVY3-M_RAhxGqqQMnWVrydxZWU" });
+const socket = io('http://localhost:3000/', { query: "token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjE2MDI4OSwiaWF0IjoxNjc2MzQyODYxLCJleHAiOjE2NzYzNjQ0NjEsInR5cGUiOiJhY2Nlc3MifQ.3WflgTV9DUUEVArp6SQ6H3bdmojXd2rCY3HVO6PdZII" });
 
 function App() {
   const [isConnected, setIsConnected] = useState(socket.connected);
@@ -53,8 +53,12 @@ function App() {
       setBalance(data);
     });
 
+    socket.on('MESSAGE', (data) => {
+      console.log(data)
+    });
+
     const getBalance = () => {
-      socket.emit('GET_BALANCE')
+      socket.emit('FETCH_BALANCE')
     }
     getBalance()
     return () => {
@@ -69,7 +73,7 @@ function App() {
   }
 
   const handleClickBet = (value) => {
-    socket.emit('BET', value);
+    socket.emit('BET', { currency: 'HBG', amountBet: value });
   }
   return (
     <div>
