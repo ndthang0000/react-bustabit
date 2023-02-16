@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import ColorButtons from './components/Button';
 import io from 'socket.io-client';
 import Play from './components/Play';
-const socket = io('http://localhost:3000/', { query: "token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjE2MDI4OSwiaWF0IjoxNjc2MzQyODYxLCJleHAiOjE2NzYzNjQ0NjEsInR5cGUiOiJhY2Nlc3MifQ.3WflgTV9DUUEVArp6SQ6H3bdmojXd2rCY3HVO6PdZII" });
+const socket = io('http://localhost:3000/', { query: "token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjE2MDI4OSwiaWF0IjoxNjc2NTEyMTg0LCJleHAiOjE2NzY1MzM3ODQsInR5cGUiOiJhY2Nlc3MifQ.Q_74BGxH1rxF8YE6m0XkPMe1eRCapynNaqu8EbxhYPw" });
 
 function App() {
   const [isConnected, setIsConnected] = useState(socket.connected);
@@ -81,6 +81,12 @@ function App() {
       <p>Your Balance: {balance}$ </p>
       <p>{valueBet > 0 ? `Your bet: ${valueBet}$` : ''}</p>
       <Play content='Stop' counter={counter} status={status} handleClickStop={handleClickStop} time={time} handleClickBet={handleClickBet} setValueBet={setValueBet} setBalance={setBalance} valueBet={valueBet}></Play>
+      <div style={{
+        marginTop: 50
+      }}>
+
+        {list.length > 0 ? list.map(item => <li style={{ color: item.status == 'WIN' ? 'green' : 'red' }}>Amount: {item.amountBet}, status: {item.status}, {item.xMulti ? 'xWin: ' + item.xMulti : ''}</li>) : 'Chưa có ai bet'}
+      </div>
     </div>
   );
 }
