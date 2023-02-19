@@ -13,6 +13,7 @@ export default function Login({ setToken }) {
     const data = await axios.post('https://server-game.autokingtrade.com/api/auth/login', { email: userName, password })
     if (data.status == 200) {
       setToken(data.data.tokens.access.token)
+      localStorage.setItem('token', data.data.tokens.access.token)
     }
   }
 

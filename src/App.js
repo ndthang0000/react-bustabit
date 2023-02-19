@@ -5,7 +5,21 @@ import ColorButtons from './components/Button';
 import io from 'socket.io-client';
 import Play from './components/Play';
 import Login from './components/Login';
+import ChartLine from './components/chart';
+import Box from '@mui/material/Box';
+import Paper from '@mui/material/Paper';
+import Grid from '@mui/material/Grid';
+import { styled } from '@mui/material/styles';
+import ListBet from './components/ListBet';
 //const socket = io('https://server-game.autokingtrade.com/', { query: "token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjE2MDI4OSwiaWF0IjoxNjc2NTM5MTQzLCJleHAiOjE2NzY1NjA3NDMsInR5cGUiOiJhY2Nlc3MifQ.iWGtYNsRPgysFmJhWM_RriQLEI6LX87-WLt8yEkyknk" });
+
+const Item = styled(Paper)(({ theme }) => ({
+  backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
+  ...theme.typography.body2,
+  padding: theme.spacing(1),
+  textAlign: 'center',
+  color: theme.palette.text.secondary,
+}));
 
 function App() {
   const [socket, setSocketIo] = useState(null)
@@ -18,9 +32,9 @@ function App() {
   const [counter, setCounter] = useState(0)
   const [balance, setBalance] = useState(0)
   const [valueBet, setValueBet] = useState(0)
+  const [chartData, setChartData] = useState([])
 
   useEffect(() => {
-
     if (socket) {
       socket.on('connect', () => {
         setIsConnected(true);
@@ -42,6 +56,7 @@ function App() {
         setStatus(data);
         if (data == 'END') {
           setValueBet(0)
+          setChartData([])
         }
       });
 
@@ -51,6 +66,8 @@ function App() {
 
       socket.on('COUNTER', (data) => {
         setCounter(data);
+        chartData.push({ name: 'time', pv: Number(data) })
+        setChartData([...chartData])
       });
 
       socket.emit('FETCH_STATUS')
@@ -89,6 +106,11 @@ function App() {
     };
   }, [token]);
 
+  useEffect(() => {
+    const getLocalStore = localStorage.getItem('token')
+    setToken(getLocalStore)
+    setSocketIo(io('https://server-game.autokingtrade.com/', { query: `token=${getLocalStore}` }))
+  }, [])
   const handleClickStop = () => {
     socket.emit('STOP', counter);
   }
@@ -102,24 +124,39 @@ function App() {
     setSocketIo(io('https://server-game.autokingtrade.com/', { query: `token=${token}` }))
   }
   return (
-    <div>
+    <div style={{
+      marginTop: 30
+    }}>
       {
         !token ?
           <Login setToken={handleSetToken} /> :
           <>
-            <p>Connected: {'' + isConnected + '__ ' + socket.id + ' '} </p>
-            <p>Your Balance: {balance}$ </p>
+
+
+          </>
+
+      }
+      <Box sx={{ flexGrow: 1 }}>
+        <Grid container spacing={2}>
+          <Grid item xs={4}>
+            <ChartLine data={chartData}>
+            </ChartLine>
+          </Grid>
+          <Grid item xs={3}>
+            <p>Your Balance: {Number(balance).toFixed(4)}$ </p>
             <p>{valueBet > 0 ? `Your bet: ${valueBet}$` : ''}</p>
             <Play content='Stop' counter={counter} status={status} handleClickStop={handleClickStop} time={time} handleClickBet={handleClickBet} setValueBet={setValueBet} setBalance={setBalance} valueBet={valueBet}></Play>
-            <div style={{
+          </Grid>
+          <Grid item xs={5}>
+            {/* <div style={{
               marginTop: 50
             }}>
-
               {list.length > 0 ? list.map((item, index) => <li key={index} style={{ color: item.status == 'WIN' ? 'green' : 'red' }}>Amount: {item.amountBet}, status: {item.status}, {item.xMulti ? 'xWin: ' + item.xMulti : ''}</li>) : 'Chưa có ai bet'}
-            </div>
-          </>
-      }
-
+            </div> */}
+            <ListBet list={list} />
+          </Grid>
+        </Grid>
+      </Box>
     </div>
   );
 }
