@@ -1,6 +1,15 @@
 import { useEffect, useState } from 'react';
 import BasicTextFields from './Bet';
 import ColorButtons from './Button'
+import { Alert, CircularProgress, LinearProgress, Typography } from '@mui/material';
+import '@fontsource/roboto/500.css';
+import { styled } from '@mui/material/styles';
+
+const Div = styled('div')(({ theme }) => ({
+  ...theme.typography.button,
+  backgroundColor: theme.palette.background.paper,
+  padding: theme.spacing(1),
+}));
 
 export default function Play({ content, counter, status, handleClickStop, time, handleClickBet, setValueBet, valueBet }) {
   const [isStop, setIsStop] = useState(false)
@@ -15,14 +24,17 @@ export default function Play({ content, counter, status, handleClickStop, time, 
   }, [status])
   return (
     <>
-      <p>Status: {status}</p>
+      <Alert severity="info">Status: {status}</Alert>
       {
         status == 'START'
           ?
 
           <div>
-            {!isStop ? <div>Counter : {counter}%
-              <ColorButtons content={content} handleClickStop={handleClickStop} setIsStop={setIsStop} /></div> : `You win: ${winValue}$\nCounter: ${counter}`}
+            {!isStop ? <div style={{
+              fontWeight: 'bold',
+              marginRight: 5
+            }}>Counter : {counter}%
+              <ColorButtons content={content} handleClickStop={handleClickStop} setIsStop={setIsStop} /></div> : <p>You win: {winValue} Counter: {counter}</p>}
 
           </div>
 
@@ -33,9 +45,9 @@ export default function Play({ content, counter, status, handleClickStop, time, 
       {
         status == 'END'
           ?
-          <div>
-            BUSTED = {counter}
-          </div>
+          <Div>
+            <Alert severity="error">BUSTED = {counter}</Alert>
+          </Div>
 
           :
           <p></p>
@@ -44,10 +56,11 @@ export default function Play({ content, counter, status, handleClickStop, time, 
       {
         status == 'PENDING'
           ?
-          <div>
-            Start After = {time}
+          <Div>
+            <LinearProgress color="success" />
+            <p mt={1}>Start After = {time}s</p>
             <BasicTextFields handleClickBet={handleClickBet} setValueBet={setValueBet}></BasicTextFields>
-          </div>
+          </Div>
 
           :
           <p></p>

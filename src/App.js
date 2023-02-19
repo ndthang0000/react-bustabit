@@ -11,6 +11,9 @@ import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
 import { styled } from '@mui/material/styles';
 import ListBet from './components/ListBet';
+import { Button } from '@mui/material';
+import CurrencyExchangeIcon from '@mui/icons-material/CurrencyExchange';
+import ResponsiveAppBar from './components/AppBar';
 //const socket = io('https://server-game.autokingtrade.com/', { query: "token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjE2MDI4OSwiaWF0IjoxNjc2NTM5MTQzLCJleHAiOjE2NzY1NjA3NDMsInR5cGUiOiJhY2Nlc3MifQ.iWGtYNsRPgysFmJhWM_RriQLEI6LX87-WLt8yEkyknk" });
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -19,6 +22,7 @@ const Item = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(1),
   textAlign: 'center',
   color: theme.palette.text.secondary,
+  elevation: 3
 }));
 
 function App() {
@@ -127,36 +131,41 @@ function App() {
     <div style={{
       marginTop: 30
     }}>
+      {/* <ResponsiveAppBar /> */}
       {
         !token ?
           <Login setToken={handleSetToken} /> :
           <>
+            <Box sx={{ flexGrow: 1 }}>
+              <Grid container spacing={2}>
+                <Grid item xs={4}>
+                  <ChartLine data={chartData}>
+                  </ChartLine>
+                </Grid>
+                <Grid item xs={3}>
+                  <Paper elevation={3} sx={{ padding: 2 }}>
+                    <Button variant="outlined" startIcon={<CurrencyExchangeIcon />}>
+                      Your Balance: {Number(balance).toFixed(4)}$
+                    </Button>
+                    <p>{valueBet > 0 ? `Your bet: ${valueBet}$` : ''}</p>
+                    <Play content='Stop' counter={counter} status={status} handleClickStop={handleClickStop} time={time} handleClickBet={handleClickBet} setValueBet={setValueBet} setBalance={setBalance} valueBet={valueBet}></Play>
+                  </Paper>
 
-
-          </>
-
-      }
-      <Box sx={{ flexGrow: 1 }}>
-        <Grid container spacing={2}>
-          <Grid item xs={4}>
-            <ChartLine data={chartData}>
-            </ChartLine>
-          </Grid>
-          <Grid item xs={3}>
-            <p>Your Balance: {Number(balance).toFixed(4)}$ </p>
-            <p>{valueBet > 0 ? `Your bet: ${valueBet}$` : ''}</p>
-            <Play content='Stop' counter={counter} status={status} handleClickStop={handleClickStop} time={time} handleClickBet={handleClickBet} setValueBet={setValueBet} setBalance={setBalance} valueBet={valueBet}></Play>
-          </Grid>
-          <Grid item xs={5}>
-            {/* <div style={{
+                </Grid>
+                <Grid item xs={5}>
+                  {/* <div style={{
               marginTop: 50
             }}>
               {list.length > 0 ? list.map((item, index) => <li key={index} style={{ color: item.status == 'WIN' ? 'green' : 'red' }}>Amount: {item.amountBet}, status: {item.status}, {item.xMulti ? 'xWin: ' + item.xMulti : ''}</li>) : 'Chưa có ai bet'}
             </div> */}
-            <ListBet list={list} />
-          </Grid>
-        </Grid>
-      </Box>
+                  <ListBet list={list} />
+                </Grid>
+              </Grid>
+            </Box>
+
+          </>
+
+      }
     </div>
   );
 }

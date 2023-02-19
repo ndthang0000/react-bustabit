@@ -9,15 +9,6 @@ import Paper from '@mui/material/Paper';
 import { tableCellClasses } from '@mui/material/TableCell';
 import { styled } from '@mui/material/styles';
 
-function createData(
-  name,
-  calories,
-  fat,
-  carbs,
-  protein,
-) {
-  return { name, calories, fat, carbs, protein };
-}
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -41,13 +32,13 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 export default function ListBet({ list }) {
   return (
-    <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
+    <TableContainer component={Paper} elevation={3}>
+      <Table sx={{ minWidth: 400 }} size="small" aria-label="a dense table">
         <TableHead>
           <TableRow>
-            <StyledTableCell>Amount</StyledTableCell>
+            <StyledTableCell>Amount Bet</StyledTableCell>
             <StyledTableCell align="right">Status</StyledTableCell>
-            <StyledTableCell align="right">xMulti</StyledTableCell>
+            <StyledTableCell align="right">Amount Win</StyledTableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -55,12 +46,13 @@ export default function ListBet({ list }) {
             <StyledTableRow
               key={index}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+              style={{ color: row.status == 'WIN' ? 'green' : 'red' }}
             >
               <StyledTableCell component="th" scope="row">
                 {row.amountBet}
               </StyledTableCell>
               <StyledTableCell align="right">{row.status}</StyledTableCell>
-              <StyledTableCell align="right">{row.xMulti}</StyledTableCell>
+              <StyledTableCell align="right">{row.xMulti ? Number(row.xMulti) * row.amountBet : 0}</StyledTableCell>
             </StyledTableRow>
           ))}
         </TableBody>
