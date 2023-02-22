@@ -1,6 +1,7 @@
 import { Button } from '@mui/material'
 import React, { useState } from 'react'
 import axios from 'axios'
+import DOMAIN from '../domain'
 
 export default function Login({ setToken }) {
   const [userName, setUserName] = useState('')
@@ -10,10 +11,10 @@ export default function Login({ setToken }) {
   const handleLogin = async () => {
     // const data = await fetch('https://server-game.autokingtrade.com/api/auth/login', { method: 'post', headers: { 'Content-Type': 'application/json' }, body: { email: userName, password } })
     // console.log(data)
-    const data = await axios.post('https://server-game.autokingtrade.com/api/auth/login', { email: userName, password })
+    const data = await axios.post(`${DOMAIN}api/auth/login`, { email: userName, password })
     if (data.status == 200) {
-      setToken(data.data.tokens.access.token)
-      localStorage.setItem('token', data.data.tokens.access.token)
+      setToken(data.data.data.tokens.access.token)
+      localStorage.setItem('token', data.data.data.tokens.access.token)
     }
   }
 

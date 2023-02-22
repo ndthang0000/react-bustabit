@@ -14,6 +14,7 @@ import ListBet from './components/ListBet';
 import { Button } from '@mui/material';
 import CurrencyExchangeIcon from '@mui/icons-material/CurrencyExchange';
 import ResponsiveAppBar from './components/AppBar';
+import DOMAIN from './domain';
 //const socket = io('https://server-game.autokingtrade.com/', { query: "token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjE2MDI4OSwiaWF0IjoxNjc2NTM5MTQzLCJleHAiOjE2NzY1NjA3NDMsInR5cGUiOiJhY2Nlc3MifQ.iWGtYNsRPgysFmJhWM_RriQLEI6LX87-WLt8yEkyknk" });
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -113,7 +114,7 @@ function App() {
   useEffect(() => {
     const getLocalStore = localStorage.getItem('token')
     setToken(getLocalStore)
-    setSocketIo(io('https://server-game.autokingtrade.com/', { query: `token=${getLocalStore}` }))
+    setSocketIo(io(DOMAIN, { query: `token=${getLocalStore}` }))
   }, [])
   const handleClickStop = () => {
     socket.emit('STOP', counter);
@@ -125,7 +126,7 @@ function App() {
 
   const handleSetToken = (token) => {
     setToken(token)
-    setSocketIo(io('https://server-game.autokingtrade.com/', { query: `token=${token}` }))
+    setSocketIo(io(DOMAIN, { query: `token=${token}` }))
   }
   return (
     <div style={{
