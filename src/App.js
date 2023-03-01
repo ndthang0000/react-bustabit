@@ -138,12 +138,11 @@ function App() {
           <Login setToken={handleSetToken} /> :
           <>
             <Box sx={{ flexGrow: 1 }}>
-              <Grid container spacing={2}>
-                <Grid item xs={4}>
-                  <ChartLine data={chartData}>
-                  </ChartLine>
+              <Grid container spacing={1}>
+                <Grid item md={4} xs={12} sm={12}>
+                  <ChartLine data={chartData}> </ChartLine>
                 </Grid>
-                <Grid item xs={3}>
+                <Grid item md={3} xs={12} sm={12}>
                   <Paper elevation={3} sx={{ padding: 2 }}>
                     <Button variant="outlined" startIcon={<CurrencyExchangeIcon />}>
                       Your Balance: {Number(balance).toFixed(4)}$
@@ -153,7 +152,7 @@ function App() {
                   </Paper>
 
                 </Grid>
-                <Grid item xs={5}>
+                <Grid item md={5} xs={12} sm={12}>
                   {/* <div style={{
               marginTop: 50
             }}>

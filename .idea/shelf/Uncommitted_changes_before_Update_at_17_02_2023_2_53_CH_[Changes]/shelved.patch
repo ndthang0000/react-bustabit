@@ -1,0 +1,19 @@
+Index: src/App.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import logo from './logo.svg';\r\nimport './App.css';\r\nimport React, { useState, useEffect } from 'react';\r\nimport ColorButtons from './components/Button';\r\nimport io from 'socket.io-client';\r\nimport Play from './components/Play';\r\nconst socket = io('http://localhost:3000/');\r\n\r\nfunction App() {\r\n  const [isConnected, setIsConnected] = useState(socket.connected);\r\n  const [lastPong, setLastPong] = useState(null);\r\n  const [list, setList] = useState([])\r\n  const [time, setTime] = useState(0)\r\n  const [status, setStatus] = useState('PENDING')\r\n  const [counter, setCounter] = useState(0)\r\n  const [balance, setBalance] = useState(0)\r\n  const [valueBet, setValueBet] = useState(0)\r\n\r\n  useEffect(() => {\r\n    socket.on('connect', () => {\r\n      setIsConnected(true);\r\n    });\r\n\r\n    socket.on('disconnect', () => {\r\n      setIsConnected(false);\r\n    });\r\n\r\n    socket.on('pong', () => {\r\n      setLastPong(new Date().toISOString());\r\n    });\r\n\r\n    socket.on('COUNT_DOWN', (data) => {\r\n      console.log(data)\r\n      setTime(data);\r\n    });\r\n\r\n    socket.on('CHANGE_STATUS', (data) => {\r\n      setStatus(data);\r\n      if (data == 'END') {\r\n        setValueBet(0)\r\n      }\r\n    });\r\n\r\n    socket.on('GET_LIST_ONLINE', (data) => {\r\n      setList(data);\r\n    });\r\n\r\n    socket.on('COUNTER', (data) => {\r\n      setCounter(data);\r\n    });\r\n\r\n    socket.on('SET_BALANCE', (data) => {\r\n      setBalance(data);\r\n    });\r\n\r\n    const getBalance = () => {\r\n      socket.emit('GET_BALANCE')\r\n    }\r\n    getBalance()\r\n    return () => {\r\n      socket.off('connect');\r\n      socket.off('disconnect');\r\n      socket.off('pong');\r\n    };\r\n  }, []);\r\n\r\n  const handleClickStop = () => {\r\n    socket.emit('STOP', counter);\r\n  }\r\n\r\n  const handleClickBet = (value) => {\r\n    socket.emit('BET', value);\r\n  }\r\n  return (\r\n    <div>\r\n      <p>Connected: {'' + isConnected + '__ ' + socket.id + ' '} </p>\r\n      <p>Your Balance: {balance}$ </p>\r\n      <p>{valueBet > 0 ? `Your bet: ${valueBet}$` : ''}</p>\r\n      <Play content='Stop' counter={counter} status={status} handleClickStop={handleClickStop} time={time} handleClickBet={handleClickBet} setValueBet={setValueBet} setBalance={setBalance} valueBet={valueBet}></Play>\r\n    </div>\r\n  );\r\n}\r\n\r\nexport default App;\r\n\r\n\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/App.js b/src/App.js
+--- a/src/App.js	
++++ b/src/App.js	
+@@ -4,7 +4,7 @@
+ import ColorButtons from './components/Button';
+ import io from 'socket.io-client';
+ import Play from './components/Play';
+-const socket = io('http://localhost:3000/');
++const socket = io('http://localhost:3006/');
+ 
+ function App() {
+   const [isConnected, setIsConnected] = useState(socket.connected);
