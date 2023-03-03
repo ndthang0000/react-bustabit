@@ -15,6 +15,7 @@ import { Button } from '@mui/material';
 import CurrencyExchangeIcon from '@mui/icons-material/CurrencyExchange';
 import ResponsiveAppBar from './components/AppBar';
 import DOMAIN from './domain';
+import axios from 'axios';
 //const socket = io('https://server-game.autokingtrade.com/', { query: "token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjE2MDI4OSwiaWF0IjoxNjc2NTM5MTQzLCJleHAiOjE2NzY1NjA3NDMsInR5cGUiOiJhY2Nlc3MifQ.iWGtYNsRPgysFmJhWM_RriQLEI6LX87-WLt8yEkyknk" });
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -57,6 +58,10 @@ function App() {
         setTime(data);
       });
 
+      socket.on('GET_BET_RECONNECT', (data) => {
+        console.log('GET_BET_RECONNECT', data)
+      });
+
       socket.on('CHANGE_STATUS', (data) => {
         setStatus(data);
         if (data == 'END') {
@@ -66,6 +71,7 @@ function App() {
       });
 
       socket.on('GET_LIST_ONLINE', (data) => {
+        console.log('GET_LIST_ONLINE', data)
         setList(data);
       });
 
@@ -112,9 +118,19 @@ function App() {
   }, [token]);
 
   useEffect(() => {
-    const getLocalStore = localStorage.getItem('token')
-    setToken(getLocalStore)
-    setSocketIo(io(DOMAIN, { query: `token=${getLocalStore}` }))
+    const fetchToken = async () => {
+      const getLocalStore = localStorage.getItem('token')
+      const config = {
+        headers: { Authorization: `Bearer ${getLocalStore}` },
+      };
+      const data = await axios.get(`${DOMAIN}api/auth/check-token`, config)
+      if (data.status == 200) {
+        setToken(getLocalStore)
+        setSocketIo(io(DOMAIN, { query: `token=${getLocalStore}` }))
+      }
+    }
+    fetchToken()
+
   }, [])
   const handleClickStop = () => {
     socket.emit('STOP', counter);

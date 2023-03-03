@@ -11,7 +11,6 @@ import {
 
 
 export default function ChartLine({ data }) {
-  console.log(data)
   return (
     <LineChart
       width={500}

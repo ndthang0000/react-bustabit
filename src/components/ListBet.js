@@ -38,6 +38,7 @@ export default function ListBet({ list }) {
           <TableRow>
             <StyledTableCell>Amount Bet</StyledTableCell>
             <StyledTableCell align="right">Status</StyledTableCell>
+            <StyledTableCell align="right">Payout</StyledTableCell>
             <StyledTableCell align="right">Amount Win</StyledTableCell>
           </TableRow>
         </TableHead>
@@ -52,7 +53,8 @@ export default function ListBet({ list }) {
                 {row.amountBet}
               </StyledTableCell>
               <StyledTableCell align="right">{row.status}</StyledTableCell>
-              <StyledTableCell align="right">{row.xMulti ? Number(row.xMulti) * row.amountBet : 0}</StyledTableCell>
+              <StyledTableCell align="right">{Number(row.payout).toFixed(3)}</StyledTableCell>
+              <StyledTableCell align="right">{Number(row.amountWin).toFixed(3)}</StyledTableCell>
             </StyledTableRow>
           ))}
         </TableBody>

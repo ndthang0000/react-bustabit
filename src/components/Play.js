@@ -14,6 +14,7 @@ const Div = styled('div')(({ theme }) => ({
 export default function Play({ content, counter, status, handleClickStop, time, handleClickBet, setValueBet, valueBet }) {
   const [isStop, setIsStop] = useState(false)
   const [winValue, setWinValue] = useState(0)
+  const [payout, setPayout] = useState(0)
   useEffect(() => {
     setWinValue(counter * valueBet)
   }, [isStop])
