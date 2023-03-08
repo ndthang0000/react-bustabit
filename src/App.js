@@ -99,6 +99,10 @@ function App() {
       const getBalance = () => {
         socket.emit('FETCH_BALANCE')
       }
+
+      socket.on('CHART_DATA', (data) => {
+
+      });
       getBalance()
     }
 
